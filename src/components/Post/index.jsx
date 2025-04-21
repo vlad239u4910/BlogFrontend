@@ -14,7 +14,7 @@ import { PostSkeleton } from "./Skeleton";
 import { fetchRemovePost } from "../../redux/slices/posts";
 
 export const Post = ({
-  _id,
+  id,
   title,
   createdAt,
   imageUrl,
@@ -34,7 +34,7 @@ export const Post = ({
 
   const onClickRemove = () => {
     if (window.confirm("Вы действительно хотите удалить статью?")) {
-      dispatch(fetchRemovePost(_id));
+      dispatch(fetchRemovePost(id));
     }
   };
 
@@ -42,7 +42,7 @@ export const Post = ({
     <div className={clsx(styles.root, { [styles.rootFull]: isFullPost })}>
       {isEditable && (
         <div className={styles.editButtons}>
-          <Link to={`/posts/${_id}/edit`}>
+          <Link to={`/posts/${id}/edit`}>
             <IconButton color="primary">
               <EditIcon />
             </IconButton>
@@ -65,7 +65,7 @@ export const Post = ({
           <h2
             className={clsx(styles.title, { [styles.titleFull]: isFullPost })}
           >
-            {isFullPost ? title : <Link to={`/posts/${_id}`}>{title}</Link>}
+            {isFullPost ? title : <Link to={`/posts/${id}`}>{title}</Link>}
           </h2>
           <ul className={styles.tags}>
             {tags.map((name) => (
