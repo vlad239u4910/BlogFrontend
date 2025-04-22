@@ -14,7 +14,7 @@ import { PostSkeleton } from "./Skeleton";
 import { fetchRemovePost } from "../../redux/slices/posts";
 
 export const Post = ({
-  _id,
+  id,
   title,
   createdAt,
   imageUrl,
