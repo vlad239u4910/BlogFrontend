@@ -20,7 +20,7 @@ export const Header = () => {
 
   return (
     <div className={styles.root}>
-      <Container maxWidth="lg" sx={{ paddingTop: 4, paddingBottom: 4 }}>
+      <Container maxWidth="lg">
         <div className={styles.inner}>
           <Link className={styles.logo} to="/">
             <div>BLOG</div>

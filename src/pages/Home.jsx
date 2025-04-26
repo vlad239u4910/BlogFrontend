@@ -14,8 +14,22 @@ export const Home = () => {
   const userData = useSelector((state) => state.auth.data);
   const { posts, tags } = useSelector((state) => state.posts);
 
+  // new
+  const [tabValue, setTabValue] = React.useState(0);
+
   const isPostsLoading = posts.status === "loading";
   const isTagsLoading = tags.status === "loading";
+
+  // new
+  const handleChangeTab = (event, newValue) => {
+    setTabValue(newValue);
+    console.log(newValue);
+  };
+  // new
+  const postsToRender =
+    tabValue === 0
+      ? posts.items
+      : [...posts.items].sort((a, b) => b.viewsCount - a.viewsCount);
 
   React.useEffect(() => {
     dispatch(fetchPosts());
@@ -27,6 +41,7 @@ export const Home = () => {
       <Tabs
         style={{ marginBottom: 15 }}
         value={0}
+        onChange={handleChangeTab}
         aria-label="basic tabs example"
       >
         <Tab label="New" />
@@ -34,7 +49,7 @@ export const Home = () => {
       </Tabs>
       <Grid container spacing={4}>
         <Grid item xs={12} md={8}>
-          {(isPostsLoading ? [...Array(5)] : posts.items).map((obj, index) =>
+          {(isPostsLoading ? [...Array(5)] : postsToRender).map((obj, index) =>
             isPostsLoading ? (
               <Post key={index} isLoading={true} />
             ) : (
