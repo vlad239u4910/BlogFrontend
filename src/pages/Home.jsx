@@ -43,7 +43,7 @@ export const Home = () => {
     <>
       <Tabs
         style={{ marginBottom: 15 }}
-        value={0}
+        value={tabValue}
         onChange={handleChangeTab}
         aria-label="basic tabs example"
       >
