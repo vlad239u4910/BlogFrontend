@@ -26,10 +26,13 @@ export const Home = () => {
     console.log(newValue);
   };
   // new
-  const postsToRender =
-    tabValue === 0
-      ? posts.items
-      : [...posts.items].sort((a, b) => b.viewsCount - a.viewsCount);
+  const postsToRender = React.useMemo(() => {
+    if (tabValue === 0) {
+      return posts.items;
+    } else {
+      return [...posts.items].sort((a, b) => b.viewsCount - a.viewsCount);
+    }
+  }, [tabValue, posts.items]);
 
   React.useEffect(() => {
     dispatch(fetchPosts());
