@@ -20,26 +20,26 @@ export const TagsBlock = ({
     <SideBlock title="Tags">
       <List>
         {(isLoading ? [...Array(5)] : items).map((name, i) => (
-          <a
-            style={{ textDecoration: "none", color: "black" }}
-            href={`/tags/${name}`}
-          >
-            <ListItem key={i} disablePadding>
-              <ListItemButton
-                selected={selectedTag === name}
-                onClick={() => onClickTag(name)}
-              >
-                <ListItemIcon>
-                  <TagIcon />
-                </ListItemIcon>
-                {isLoading ? (
-                  <Skeleton width={100} />
-                ) : (
-                  <ListItemText primary={name} />
-                )}
-              </ListItemButton>
-            </ListItem>
-          </a>
+          <ListItem key={i} disablePadding>
+            <ListItemButton
+              component="a"
+              href={`/tags/${name}`}
+              selected={selectedTag === name}
+              onClick={(e) => {
+                e.preventDefault();
+                onClickTag(name);
+              }}
+            >
+              <ListItemIcon>
+                <TagIcon />
+              </ListItemIcon>
+              {isLoading ? (
+                <Skeleton width={100} />
+              ) : (
+                <ListItemText primary={name} />
+              )}
+            </ListItemButton>
+          </ListItem>
         ))}
       </List>
     </SideBlock>
