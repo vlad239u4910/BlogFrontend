@@ -16,6 +16,7 @@ export const Home = () => {
 
   // new
   const [tabValue, setTabValue] = React.useState(0);
+  const [selectedTag, setSelectedTag] = React.useState(null);
 
   const isPostsLoading = posts.status === "loading";
   const isTagsLoading = tags.status === "loading";
@@ -23,16 +24,33 @@ export const Home = () => {
   // new
   const handleChangeTab = (event, newValue) => {
     setTabValue(newValue);
-    console.log(newValue);
+    setSelectedTag(null);
   };
+
+  const handleTagClick = (tag) => {
+    if (selectedTag === tag) {
+      setSelectedTag(null);
+    } else {
+      setSelectedTag(tag);
+    }
+  };
+
   // new
   const postsToRender = React.useMemo(() => {
-    if (tabValue === 0) {
-      return posts.items;
-    } else {
-      return [...posts.items].sort((a, b) => b.viewsCount - a.viewsCount);
+    let filteredPosts = posts.items;
+
+    if (selectedTag) {
+      filteredPosts = filteredPosts.filter((post) =>
+        post.tags.includes(selectedTag)
+      );
     }
-  }, [tabValue, posts.items]);
+
+    if (tabValue === 0) {
+      return filteredPosts;
+    } else {
+      return [...filteredPosts].sort((a, b) => b.viewsCount - a.viewsCount);
+    }
+  }, [tabValue, posts.items, selectedTag]);
 
   React.useEffect(() => {
     dispatch(fetchPosts());
@@ -75,7 +93,12 @@ export const Home = () => {
           )}
         </Grid>
         <Grid item xs={12} md={4}>
-          <TagsBlock items={tags.items} isLoading={isTagsLoading} />
+          <TagsBlock
+            items={tags.items}
+            isLoading={isTagsLoading}
+            onClickTag={handleTagClick}
+            selectedTag={selectedTag}
+          />
           <CommentsBlock
             items={[
               {

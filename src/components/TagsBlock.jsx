@@ -10,7 +10,12 @@ import Skeleton from "@mui/material/Skeleton";
 
 import { SideBlock } from "./SideBlock";
 
-export const TagsBlock = ({ items, isLoading = true }) => {
+export const TagsBlock = ({
+  items,
+  isLoading = true,
+  onClickTag,
+  selectedTag,
+}) => {
   return (
     <SideBlock title="Tags">
       <List>
@@ -20,7 +25,10 @@ export const TagsBlock = ({ items, isLoading = true }) => {
             href={`/tags/${name}`}
           >
             <ListItem key={i} disablePadding>
-              <ListItemButton>
+              <ListItemButton
+                selected={selectedTag === name}
+                onClick={() => onClickTag(name)}
+              >
                 <ListItemIcon>
                   <TagIcon />
                 </ListItemIcon>
