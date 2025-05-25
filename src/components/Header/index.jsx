@@ -12,7 +12,7 @@ export const Header = () => {
   const isAuth = useSelector(selectIsAuth);
 
   const onClickLogout = () => {
-    if (window.confirm("Are ypu sure you want to sign out?")) {
+    if (window.confirm("Are you sure you want to sign out?")) {
       dispatch(logout());
       window.localStorage.removeItem("token");
     }

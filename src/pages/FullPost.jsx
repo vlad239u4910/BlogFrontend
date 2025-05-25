@@ -5,70 +5,104 @@ import axios from "../axios";
 
 import { Post } from "../components/Post";
 import { Index } from "../components/AddComment";
-import { CommentsBlock } from "../components/CommentsBlock";
+import { CommentsBlock } from "../components/CommentsBlock/CommentsBlock";
+import { fetchComments } from "../redux/slices/comments";
 
 export const FullPost = () => {
-  const [data, setData] = React.useState();
-  const [isLoading, setLoading] = React.useState(true);
+  const [post, setPost] = React.useState();
+  const [comments, setComments] = React.useState([]);
+  const [isPostLoading, setPostLoading] = React.useState(true);
+  const [isCommentsLoading, setCommentsLoading] = React.useState(true);
   const { id } = useParams();
 
+  const [commentToAdd, setCommentToAdd] = React.useState("");
+
   React.useEffect(() => {
+    setPostLoading(true);
     axios
       .get(`/posts/${id}`)
       .then((res) => {
-        setData(res.data);
-        setLoading(false);
+        setPost(res.data);
+        setPostLoading(false);
       })
       .catch((err) => {
         console.warn(err);
         alert("Error getting post");
       });
-  }, []);
+  }, [id]);
 
-  if (isLoading) {
-    return <Post isLoading={isLoading} isFullPost />;
+  const fetchComments = () => {
+    setCommentsLoading(true);
+    axios
+      .get(`/posts/${id}/comments`)
+      .then((res) => {
+        setComments(res.data);
+        setCommentsLoading(false);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.warn(err);
+        alert("Error getting comments");
+      });
+  };
+  React.useEffect(() => {
+    fetchComments();
+  }, [id]);
+
+  if (isPostLoading || !post) {
+    return <Post isPostLoading isFullPost />;
   }
+
+  const HandleCommentEnter = (event) => {
+    setCommentToAdd(event.target.value);
+  };
+
+  const HandleCommentSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      await axios.post(`/posts/${id}/comment`, {
+        text: commentToAdd,
+      });
+      setCommentToAdd("");
+
+      const res = await axios.get(`/posts/${id}/comments`);
+      setComments(res.data);
+    } catch (err) {
+      console.warn(err);
+      alert("Error sending comment!");
+    }
+  };
 
   return (
     <>
       <Post
-        id={data._id}
-        title={data.title}
+        id={post._id}
+        title={post.title}
         imageUrl={
-          data.imageUrl
-            ? `${process.env.REACT_APP_API_URL}${data.imageUrl}`
+          post.imageUrl
+            ? `${process.env.REACT_APP_API_URL}${post.imageUrl}`
             : ""
         }
-        // imageUrl="https://res.cloudinary.com/practicaldev/image/fetch/s--UnAfrEG8--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/icohm5g0axh9wjmu4oc3.png"
-        user={data.user}
-        createdAt={data.createdAt}
-        viewsCount={data.viewsCount}
-        commentsCount={3}
-        tags={data.tags}
+        user={post.user}
+        createdAt={post.createdAt}
+        viewsCount={post.viewsCount}
+        commentsCount={comments.length}
+        tags={post.tags}
         isFullPost
       >
-        <ReactMarkdown children={data.text} />
+        <ReactMarkdown children={post.text} />
       </Post>
       <CommentsBlock
-        items={[
-          {
-            user: {
-              fullName: "Ivan Gokhem",
-              avatarUrl: "https://mui.com/static/images/avatar/1.jpg",
-            },
-            text: "Test comment 333",
-          },
-          {
-            user: {
-              fullName: "Test user",
-              avatarUrl: "https://mui.com/static/images/avatar/2.jpg",
-            },
-            text: "When displaying three lines or more, the avatar is not aligned at the top. You should set the prop to align the avatar at the top",
-          },
-        ]}
-        isLoading={false}
+        comments={comments}
+        isCommentsLoading={false}
+        onCommentsChange={fetchComments}
       >
-        <Index />
+        <Index
+          HandleCommentEnter={HandleCommentEnter}
+          commentToAdd={commentToAdd}
+          HandleCommentSubmit={HandleCommentSubmit}
+        />
       </CommentsBlock>
     </>
   );

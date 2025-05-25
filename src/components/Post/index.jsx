@@ -24,16 +24,16 @@ export const Post = ({
   tags,
   children,
   isFullPost,
-  isLoading,
+  isPostLoading,
   isEditable,
 }) => {
   const dispatch = useDispatch();
-  if (isLoading) {
+  if (isPostLoading) {
     return <PostSkeleton />;
   }
 
   const onClickRemove = () => {
-    if (window.confirm("Вы действительно хотите удалить статью?")) {
+    if (window.confirm("Are you sure you want to remove post?")) {
       dispatch(fetchRemovePost(id));
     }
   };
@@ -68,11 +68,12 @@ export const Post = ({
             {isFullPost ? title : <Link to={`/posts/${id}`}>{title}</Link>}
           </h2>
           <ul className={styles.tags}>
-            {tags.map((name) => (
-              <li key={name}>
-                <Link to={`/tag/${name}`}>#{name}</Link>
-              </li>
-            ))}
+            {Array.isArray(tags) &&
+              tags.map((name) => (
+                <li key={name}>
+                  <Link to={`/tag/${name}`}>#{name}</Link>
+                </li>
+              ))}
           </ul>
           {children && <div className={styles.content}>{children}</div>}
           <ul className={styles.postDetails}>
