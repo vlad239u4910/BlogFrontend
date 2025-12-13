@@ -11,8 +11,9 @@ export const Header = () => {
   const dispatch = useDispatch();
   const isAuth = useSelector(selectIsAuth);
 
-  const onClickLogout = () => {
-    if (window.confirm("Are you sure you want to sign out?")) {
+  const onClickLogout = async () => {
+    const confirm = await window.confirm("Are you sure you want to sign out?");
+    if (confirm) {
       dispatch(logout());
       window.localStorage.removeItem("token");
     }

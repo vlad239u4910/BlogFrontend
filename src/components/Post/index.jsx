@@ -12,6 +12,8 @@ import styles from "./Post.module.scss";
 import { UserInfo } from "../UserInfo";
 import { PostSkeleton } from "./Skeleton";
 import { fetchRemovePost } from "../../redux/slices/posts";
+import { ToastContainer } from "react-toastify";
+import { convertTime } from "../../utils/convertTime";
 
 export const Post = ({
   id,
@@ -27,13 +29,17 @@ export const Post = ({
   isPostLoading,
   isEditable,
 }) => {
+  // console.log(user);
   const dispatch = useDispatch();
   if (isPostLoading) {
     return <PostSkeleton />;
   }
 
-  const onClickRemove = () => {
-    if (window.confirm("Are you sure you want to remove post?")) {
+  const onClickRemove = async () => {
+    const confirm = await window.confirm(
+      "Are you sure you want to remove post?"
+    );
+    if (confirm) {
       dispatch(fetchRemovePost(id));
     }
   };
@@ -60,7 +66,7 @@ export const Post = ({
         />
       )}
       <div className={styles.wrapper}>
-        <UserInfo {...user} additionalText={createdAt} />
+        <UserInfo {...user} additionalText={convertTime(createdAt)} />
         <div className={styles.indention}>
           <h2
             className={clsx(styles.title, { [styles.titleFull]: isFullPost })}

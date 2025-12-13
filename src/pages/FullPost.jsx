@@ -2,11 +2,14 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import axios from "../axios";
+import { useDispatch, useSelector } from "react-redux";
 
 import { Post } from "../components/Post";
 import { Index } from "../components/AddComment";
 import { CommentsBlock } from "../components/CommentsBlock/CommentsBlock";
 import { fetchComments } from "../redux/slices/comments";
+import { fetchAuthMe } from "../redux/slices/auth";
+import { selectAuthData } from "../redux/slices/auth";
 
 export const FullPost = () => {
   const [post, setPost] = React.useState();
@@ -16,6 +19,14 @@ export const FullPost = () => {
   const { id } = useParams();
 
   const [commentToAdd, setCommentToAdd] = React.useState("");
+
+  const dispatch = useDispatch();
+  const userData = useSelector(selectAuthData);
+  console.log(`userdata: ${userData}`);
+
+  React.useEffect(() => {
+    dispatch(fetchAuthMe());
+  }, [dispatch]);
 
   React.useEffect(() => {
     setPostLoading(true);
@@ -99,6 +110,7 @@ export const FullPost = () => {
         onCommentsChange={fetchComments}
       >
         <Index
+          userData={userData || false}
           HandleCommentEnter={HandleCommentEnter}
           commentToAdd={commentToAdd}
           HandleCommentSubmit={HandleCommentSubmit}

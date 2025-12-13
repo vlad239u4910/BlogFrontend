@@ -28,8 +28,16 @@ export const CommentsBlock = ({
                   ) : (
                     <Avatar
                       alt={comment.user.fullName}
-                      src={comment.user.avatarUrl}
-                    />
+                      src={
+                        comment.user.avatarUrl
+                          ? `${process.env.REACT_APP_API_URL}${comment.user.avatarUrl}`
+                          : ""
+                      }
+                    >
+                      {!comment.user.avatarUrl && comment.user.fullName
+                        ? comment.user.fullName[0].toUpperCase()
+                        : ""}
+                    </Avatar>
                   )}
                 </ListItemAvatar>
                 {isCommentsLoading ? (

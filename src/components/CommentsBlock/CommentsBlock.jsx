@@ -38,8 +38,17 @@ export const CommentsBlock = ({
                   ) : (
                     <Avatar
                       alt={comment.user.fullName}
-                      src={comment.user.avatarUrl}
-                    />
+                      src={
+                        comment.user.avatarUrl
+                          ? `${process.env.REACT_APP_API_URL}${comment.user.avatarUrl}`
+                          : ""
+                      }
+                    >
+                      {" "}
+                      {!comment.user.avatarUrl && comment.user.fullName
+                        ? comment.user.fullName[0].toUpperCase()
+                        : ""}
+                    </Avatar>
                   )}
                 </ListItemAvatar>
 
@@ -60,11 +69,10 @@ export const CommentsBlock = ({
                     <IconButton color="primary" size="small"></IconButton>
                     <IconButton
                       onClick={async () => {
-                        if (
-                          window.confirm(
-                            "Are you sure you want to remove comment?"
-                          )
-                        ) {
+                        const confirm = await window.confirm(
+                          "Are you sure you want to remove comment?"
+                        );
+                        if (confirm) {
                           await dispatch(fetchRemoveComment(comment._id));
                           onCommentsChange?.();
                         }

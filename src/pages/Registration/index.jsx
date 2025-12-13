@@ -7,6 +7,7 @@ import TextField from "@mui/material/TextField";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
+import axios from "../../axios.js";
 
 import styles from "./Login.module.scss";
 import {
@@ -30,9 +31,16 @@ export const Registration = () => {
     },
     mode: "onChange",
   });
+  const [imageUrl, setImageUrl] = React.useState("");
+  const inputFileRef = React.useRef(null);
 
   const onSubmit = async (values) => {
-    const data = await dispatch(fetchRegister(values));
+    const data = await dispatch(
+      fetchRegister({
+        ...values,
+        avatarUrl: imageUrl,
+      })
+    );
 
     if (!data.payload) {
       return alert("Error to sign up!");
@@ -41,6 +49,24 @@ export const Registration = () => {
     if ("token" in data.payload) {
       window.localStorage.setItem("token", data.payload.token);
     }
+  };
+
+  const handleChangeFile = async (event) => {
+    try {
+      const formData = new FormData();
+      const file = event.target.files[0];
+      formData.append("image", file);
+
+      const { data } = await axios.post("/upload", formData);
+      setImageUrl(data.url);
+    } catch (err) {
+      console.warn(err);
+      alert("Error to loading file");
+    }
+  };
+
+  const onClickRemoveImage = () => {
+    setImageUrl("");
   };
 
   if (isAuth) {
@@ -53,8 +79,37 @@ export const Registration = () => {
         Create account
       </Typography>
       <div className={styles.avatar}>
-        <Avatar sx={{ width: 100, height: 100 }} />
+        <Avatar
+          sx={{
+            width: 100,
+            height: 100,
+            cursor: "pointer",
+            transition: "0.25s ease",
+            "&:hover": {
+              filter: "brightness(0.6)",
+            },
+          }}
+          onClick={() => inputFileRef.current.click()}
+          src={`${process.env.REACT_APP_API_URL}${imageUrl}`}
+        />
       </div>
+      <input
+        ref={inputFileRef}
+        type="file"
+        onChange={handleChangeFile}
+        hidden
+      />
+      {imageUrl && (
+        <>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={onClickRemoveImage}
+          >
+            Delete
+          </Button>
+        </>
+      )}
       <form onSubmit={handleSubmit(onSubmit)}>
         <TextField
           error={Boolean(errors.fullName?.message)}

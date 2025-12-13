@@ -19,28 +19,30 @@ export const TagsBlock = ({
   return (
     <SideBlock title="Tags">
       <List>
-        {(isLoading ? [...Array(5)] : items).map((name, i) => (
-          <ListItem key={i} disablePadding>
-            <ListItemButton
-              component="a"
-              href={`/tags/${name}`}
-              selected={selectedTag === name}
-              onClick={(e) => {
-                e.preventDefault();
-                onClickTag(name);
-              }}
-            >
-              <ListItemIcon>
-                <TagIcon />
-              </ListItemIcon>
-              {isLoading ? (
-                <Skeleton width={100} />
-              ) : (
-                <ListItemText primary={name} />
-              )}
-            </ListItemButton>
-          </ListItem>
-        ))}
+        {(isLoading ? [...Array(5)] : items)
+          .filter((name) => name)
+          .map((name, i) => (
+            <ListItem key={i} disablePadding>
+              <ListItemButton
+                component="a"
+                href={`/tags/${name}`}
+                selected={selectedTag === name}
+                onClick={(e) => {
+                  e.preventDefault();
+                  onClickTag(name);
+                }}
+              >
+                <ListItemIcon>
+                  <TagIcon />
+                </ListItemIcon>
+                {isLoading ? (
+                  <Skeleton width={100} />
+                ) : (
+                  <ListItemText primary={name} />
+                )}
+              </ListItemButton>
+            </ListItem>
+          ))}
       </List>
     </SideBlock>
   );

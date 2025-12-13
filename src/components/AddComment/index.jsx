@@ -2,22 +2,37 @@ import React from "react";
 
 import styles from "./AddComment.module.scss";
 
+import { useSelector } from "react-redux";
 import TextField from "@mui/material/TextField";
-import Avatar from "@mui/material/Avatar";
+import { Avatar } from "@mui/material";
 import Button from "@mui/material/Button";
+import { selectIsAuth } from "../../redux/slices/auth";
 
 export const Index = ({
+  userData,
   HandleCommentEnter,
   commentToAdd,
   HandleCommentSubmit,
 }) => {
+  const isAuth = useSelector(selectIsAuth);
+  console.log(`userData: ${userData.avatarUrl}`);
   return (
     <>
       <div className={styles.root}>
         <Avatar
-          classes={{ root: styles.avatar }}
-          src="https://mui.com/static/images/avatar/5.jpg"
-        />
+          className={styles.avatar}
+          src={
+            userData.avatarUrl
+              ? `${process.env.REACT_APP_API_URL}${userData.avatarUrl}`
+              : ""
+          }
+          alt={userData.fullName}
+          sx={{ width: 40, height: 40 }}
+        >
+          {!userData.avatarUrl && userData.fullName
+            ? userData.fullName[0].toUpperCase()
+            : ""}
+        </Avatar>
         <div className={styles.form}>
           <TextField
             onChange={HandleCommentEnter}
@@ -28,9 +43,11 @@ export const Index = ({
             multiline
             fullWidth
           />
-          <Button variant="contained" onClick={HandleCommentSubmit}>
-            Send
-          </Button>
+          {isAuth && (
+            <Button variant="contained" onClick={HandleCommentSubmit}>
+              Send
+            </Button>
+          )}
         </div>
       </div>
     </>
