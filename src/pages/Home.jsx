@@ -25,6 +25,7 @@ export const Home = () => {
   const isCommentsLoading = comments.status === "loading";
 
   // new
+
   const handleChangeTab = (event, newValue) => {
     setTabValue(newValue);
     setSelectedTag(null);
@@ -75,7 +76,7 @@ export const Home = () => {
       <Grid container spacing={4}>
         <Grid item xs={12} md={8}>
           {(isPostsLoading ? [...Array(5)] : postsToRender).map((obj, index) =>
-            isPostsLoading ? (
+            isPostsLoading || isCommentsLoading ? (
               <Post key={index} isLoading={true} />
             ) : (
               <Post
@@ -90,7 +91,12 @@ export const Home = () => {
                 user={obj.user}
                 createdAt={obj.createdAt}
                 viewsCount={obj.viewsCount}
-                commentsCount={3}
+                commentsCount={
+                  comments.items.filter((item) => {
+                    return item.post === obj._id;
+                  }).length
+                }
+                isCommentsLoading={false}
                 tags={obj.tags}
                 isEditable={userData?._id === obj.user._id}
               />

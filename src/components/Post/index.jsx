@@ -12,7 +12,6 @@ import styles from "./Post.module.scss";
 import { UserInfo } from "../UserInfo";
 import { PostSkeleton } from "./Skeleton";
 import { fetchRemovePost } from "../../redux/slices/posts";
-import { ToastContainer } from "react-toastify";
 import { convertTime } from "../../utils/convertTime";
 
 export const Post = ({
@@ -27,6 +26,7 @@ export const Post = ({
   children,
   isFullPost,
   isPostLoading,
+
   isEditable,
 }) => {
   // console.log(user);
