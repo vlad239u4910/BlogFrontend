@@ -45,7 +45,7 @@ export const Home = () => {
 
     if (selectedTag) {
       filteredPosts = filteredPosts.filter((post) =>
-        post.tags.includes(selectedTag)
+        post.tags.includes(selectedTag),
       );
     }
 
@@ -60,7 +60,7 @@ export const Home = () => {
     dispatch(fetchPosts());
     dispatch(fetchTags());
     dispatch(fetchComments());
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
@@ -100,7 +100,7 @@ export const Home = () => {
                 tags={obj.tags}
                 isEditable={userData?._id === obj.user._id}
               />
-            )
+            ),
           )}
         </Grid>
         <Grid item xs={12} md={4}>

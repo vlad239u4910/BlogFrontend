@@ -15,7 +15,6 @@ export const AddPost = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const isAuth = useSelector(selectIsAuth);
-  const [isLoading, setLoading] = React.useState(false);
   const [text, setText] = React.useState("");
   const [title, setTitle] = React.useState("");
   const [tags, setTags] = React.useState("");
@@ -47,8 +46,6 @@ export const AddPost = () => {
 
   const onSubmit = async () => {
     try {
-      setLoading(true);
-
       const fields = {
         title,
         imageUrl,
@@ -84,7 +81,7 @@ export const AddPost = () => {
           alert("Error getting post!");
         });
     }
-  }, []);
+  }, [id]);
 
   const options = React.useMemo(
     () => ({
@@ -98,7 +95,7 @@ export const AddPost = () => {
         delay: 1000,
       },
     }),
-    []
+    [],
   );
 
   if (!window.localStorage.getItem("token") && !isAuth) {
