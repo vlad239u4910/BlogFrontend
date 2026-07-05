@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Post } from "../components/Post";
 import { Index } from "../components/AddComment";
 import { CommentsBlock } from "../components/CommentsBlock/CommentsBlock";
-import { fetchComments } from "../redux/slices/comments";
 import { fetchAuthMe } from "../redux/slices/auth";
 import { selectAuthData } from "../redux/slices/auth";
 
@@ -15,17 +14,17 @@ export const FullPost = () => {
   const [post, setPost] = React.useState();
   const [comments, setComments] = React.useState([]);
   const [isPostLoading, setPostLoading] = React.useState(true);
-  const [isCommentsLoading, setCommentsLoading] = React.useState(true);
   const { id } = useParams();
 
   const [commentToAdd, setCommentToAdd] = React.useState("");
 
   const dispatch = useDispatch();
   const userData = useSelector(selectAuthData);
-  console.log(`userdata: ${userData}`);
 
   React.useEffect(() => {
-    dispatch(fetchAuthMe());
+    if (window.localStorage.getItem("token")) {
+      dispatch(fetchAuthMe());
+    }
   }, [dispatch]);
 
   React.useEffect(() => {
@@ -43,13 +42,10 @@ export const FullPost = () => {
   }, [id]);
 
   const fetchComments = () => {
-    setCommentsLoading(true);
     axios
       .get(`/posts/${id}/comments`)
       .then((res) => {
         setComments(res.data);
-        setCommentsLoading(false);
-        console.log(res.data);
       })
       .catch((err) => {
         console.warn(err);
@@ -58,7 +54,7 @@ export const FullPost = () => {
   };
   React.useEffect(() => {
     fetchComments();
-  }, [id]);
+  });
 
   if (isPostLoading || !post) {
     return <Post isPostLoading isFullPost />;

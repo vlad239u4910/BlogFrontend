@@ -29,7 +29,6 @@ export const Post = ({
 
   isEditable,
 }) => {
-  // console.log(user);
   const dispatch = useDispatch();
   if (isPostLoading) {
     return <PostSkeleton />;
@@ -37,7 +36,7 @@ export const Post = ({
 
   const onClickRemove = async () => {
     const confirm = await window.confirm(
-      "Are you sure you want to remove post?"
+      "Are you sure you want to remove post?",
     );
     if (confirm) {
       dispatch(fetchRemovePost(id));

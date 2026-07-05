@@ -15,7 +15,6 @@ export const Index = ({
   HandleCommentSubmit,
 }) => {
   const isAuth = useSelector(selectIsAuth);
-  console.log(`userData: ${userData.avatarUrl}`);
   return (
     <>
       <div className={styles.root}>
