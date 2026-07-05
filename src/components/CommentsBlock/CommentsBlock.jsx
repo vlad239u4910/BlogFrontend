@@ -15,7 +15,6 @@ import {
   Skeleton,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Clear";
-import EditIcon from "@mui/icons-material/Edit";
 
 export const CommentsBlock = ({
   comments,
@@ -70,7 +69,7 @@ export const CommentsBlock = ({
                     <IconButton
                       onClick={async () => {
                         const confirm = await window.confirm(
-                          "Are you sure you want to remove comment?"
+                          "Are you sure you want to remove comment?",
                         );
                         if (confirm) {
                           await dispatch(fetchRemoveComment(comment._id));
@@ -87,7 +86,7 @@ export const CommentsBlock = ({
               </ListItem>
               <Divider variant="inset" component="li" />
             </React.Fragment>
-          )
+          ),
         )}
       </List>
       {children}

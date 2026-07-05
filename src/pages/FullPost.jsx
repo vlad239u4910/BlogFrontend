@@ -22,7 +22,7 @@ export const FullPost = () => {
 
   const dispatch = useDispatch();
   const userData = useSelector(selectAuthData);
-  console.log(`userdata: ${userData}`);
+  // console.log(`userdata: ${userData}`);
 
   React.useEffect(() => {
     dispatch(fetchAuthMe());
@@ -49,7 +49,7 @@ export const FullPost = () => {
       .then((res) => {
         setComments(res.data);
         setCommentsLoading(false);
-        console.log(res.data);
+        // console.log(res.data);
       })
       .catch((err) => {
         console.warn(err);

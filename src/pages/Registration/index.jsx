@@ -10,11 +10,7 @@ import Avatar from "@mui/material/Avatar";
 import axios from "../../axios.js";
 
 import styles from "./Login.module.scss";
-import {
-  fetchAuth,
-  fetchRegister,
-  selectIsAuth,
-} from "../../redux/slices/auth";
+import { fetchRegister, selectIsAuth } from "../../redux/slices/auth";
 
 export const Registration = () => {
   const isAuth = useSelector(selectIsAuth);
@@ -39,7 +35,7 @@ export const Registration = () => {
       fetchRegister({
         ...values,
         avatarUrl: imageUrl,
-      })
+      }),
     );
 
     if (!data.payload) {
