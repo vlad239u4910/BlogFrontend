@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Post } from "../components/Post";
 import { Index } from "../components/AddComment";
 import { CommentsBlock } from "../components/CommentsBlock/CommentsBlock";
-import { fetchComments } from "../redux/slices/comments";
 import { fetchAuthMe } from "../redux/slices/auth";
 import { selectAuthData } from "../redux/slices/auth";
 
@@ -15,7 +14,7 @@ export const FullPost = () => {
   const [post, setPost] = React.useState();
   const [comments, setComments] = React.useState([]);
   const [isPostLoading, setPostLoading] = React.useState(true);
-  const [isCommentsLoading, setCommentsLoading] = React.useState(true);
+  const [, setCommentsLoading] = React.useState(true);
   const { id } = useParams();
 
   const [commentToAdd, setCommentToAdd] = React.useState("");
@@ -56,8 +55,10 @@ export const FullPost = () => {
         alert("Error getting comments");
       });
   };
+
   React.useEffect(() => {
     fetchComments();
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   if (isPostLoading || !post) {
